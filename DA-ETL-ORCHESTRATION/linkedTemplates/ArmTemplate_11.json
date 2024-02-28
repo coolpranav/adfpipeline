@@ -1,0 +1,1746 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "DA-ETL-ORCHESTRATION"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SubD_tmpRawLEAPTAS_SBDMTR_HistoryData_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataFoundationDB",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DF_DBConnection/LEAP Tables"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "sbd_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "group_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sbf_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sbf_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "moq",
+						"type": "nvarchar"
+					},
+					{
+						"name": "effective_from",
+						"type": "nvarchar"
+					},
+					{
+						"name": "effective_to",
+						"type": "nvarchar"
+					},
+					{
+						"name": "is_base",
+						"type": "nvarchar"
+					},
+					{
+						"name": "RptMonthYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FileSetId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "Filename",
+						"type": "varchar"
+					},
+					{
+						"name": "LastModifiedDatetime",
+						"type": "varchar"
+					},
+					{
+						"name": "TimeStampIns",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tmpRawLEAPTAS_SBDMTR_HistoryData"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SubD_ttmpRawLEAPTAS_SBDMPG_HistoryData_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataFoundationDB",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DF_DBConnection/LEAP Tables"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "sbd_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "group_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sbf_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sbf_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "moq",
+						"type": "nvarchar"
+					},
+					{
+						"name": "effective_from",
+						"type": "nvarchar"
+					},
+					{
+						"name": "effective_to",
+						"type": "nvarchar"
+					},
+					{
+						"name": "is_base",
+						"type": "nvarchar"
+					},
+					{
+						"name": "RptMonthYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FileSetId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "Filename",
+						"type": "varchar"
+					},
+					{
+						"name": "LastModifiedDatetime",
+						"type": "varchar"
+					},
+					{
+						"name": "TimeStampIns",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tmpRawLEAPTAS_SBDMPG_HistoryData"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SubdFolderpath')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DFLeapTempStorageLink",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"Folder": {
+						"type": "string"
+					},
+					"Container": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "SubD Data Load"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "@dataset().Folder",
+							"type": "Expression"
+						},
+						"container": {
+							"value": "@dataset().Container",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Supervisordetailed_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataFoundationDB",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DF_DBConnection/LEAP Tables"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "branch_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "branch_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "warehouse",
+						"type": "nvarchar"
+					},
+					{
+						"name": "store_type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ira_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ira_number",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ira_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_user_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_user_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "include_draft",
+						"type": "nvarchar"
+					},
+					{
+						"name": "product_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "product_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "batch_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "batch_expiry_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "mrp",
+						"type": "nvarchar"
+					},
+					{
+						"name": "upc",
+						"type": "nvarchar"
+					},
+					{
+						"name": "system_case",
+						"type": "nvarchar"
+					},
+					{
+						"name": "system_piece",
+						"type": "nvarchar"
+					},
+					{
+						"name": "physical_case",
+						"type": "nvarchar"
+					},
+					{
+						"name": "physical_piece",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ira_percentage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sub_brand_form",
+						"type": "nvarchar"
+					},
+					{
+						"name": "brand_form",
+						"type": "nvarchar"
+					},
+					{
+						"name": "brand",
+						"type": "nvarchar"
+					},
+					{
+						"name": "category",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FileSetId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "Filename",
+						"type": "varchar"
+					},
+					{
+						"name": "LastModifiedDatetime",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					},
+					{
+						"name": "TimeStampIns",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tmpRawLEAPTAS_Supervisordetailed"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Supervisorsummary_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataFoundationDB",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DF_DBConnection/LEAP Tables"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "branch_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "branch_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "warehouse",
+						"type": "nvarchar"
+					},
+					{
+						"name": "store_type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ira_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ira_number",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ira_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_user_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_user_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "include_draft",
+						"type": "nvarchar"
+					},
+					{
+						"name": "product_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "product_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "batch_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "batch_expiry_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "mrp",
+						"type": "nvarchar"
+					},
+					{
+						"name": "upc",
+						"type": "nvarchar"
+					},
+					{
+						"name": "system_case",
+						"type": "nvarchar"
+					},
+					{
+						"name": "system_piece",
+						"type": "nvarchar"
+					},
+					{
+						"name": "physical_case",
+						"type": "nvarchar"
+					},
+					{
+						"name": "physical_piece",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ira_percentage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sub_brand_form",
+						"type": "nvarchar"
+					},
+					{
+						"name": "brand_form",
+						"type": "nvarchar"
+					},
+					{
+						"name": "brand",
+						"type": "nvarchar"
+					},
+					{
+						"name": "category",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FileSetId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "Filename",
+						"type": "varchar"
+					},
+					{
+						"name": "LastModifiedDatetime",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					},
+					{
+						"name": "TimeStampIns",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tmpRawLEAPTAS_Supervisorsummary"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Supervisortrade_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataFoundationDB",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DF_DBConnection/LEAP Tables"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "branch_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "branch_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "warehouse",
+						"type": "nvarchar"
+					},
+					{
+						"name": "store_type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ira_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ira_number",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ira_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_user_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_user_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "include_draft",
+						"type": "nvarchar"
+					},
+					{
+						"name": "product_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "product_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "batch_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "batch_expiry_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "mrp",
+						"type": "nvarchar"
+					},
+					{
+						"name": "upc",
+						"type": "nvarchar"
+					},
+					{
+						"name": "system_case",
+						"type": "nvarchar"
+					},
+					{
+						"name": "system_piece",
+						"type": "nvarchar"
+					},
+					{
+						"name": "physical_case",
+						"type": "nvarchar"
+					},
+					{
+						"name": "physical_piece",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ira_percentage",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sub_brand_form",
+						"type": "nvarchar"
+					},
+					{
+						"name": "brand_form",
+						"type": "nvarchar"
+					},
+					{
+						"name": "brand",
+						"type": "nvarchar"
+					},
+					{
+						"name": "category",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FileSetId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "Filename",
+						"type": "varchar"
+					},
+					{
+						"name": "LastModifiedDatetime",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					},
+					{
+						"name": "TimeStampIns",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tmpRawLEAPTAS_Supervisortrade"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TASDdatabaseConnection_V2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DF_DBConnection/LEAP Tables"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TASDestination_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"tablename": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "DF_DBConnection/LEAP Tables"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "coh_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "retailer_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "retailer_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_type_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sector_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "seller_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "seller_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "coh_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "target",
+						"type": "nvarchar"
+					},
+					{
+						"name": "achievement",
+						"type": "nvarchar"
+					},
+					{
+						"name": "achievement_status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "calculation_rule",
+						"type": "nvarchar"
+					},
+					{
+						"name": "coh_detail",
+						"type": "nvarchar"
+					},
+					{
+						"name": "withsale",
+						"type": "nvarchar"
+					},
+					{
+						"name": "nosale",
+						"type": "nvarchar"
+					},
+					{
+						"name": "distributor_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "distributor_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FileSetId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "Filename",
+						"type": "varchar"
+					},
+					{
+						"name": "LastModifiedDatetime",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					},
+					{
+						"name": "TimeStampIns",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					},
+					{
+						"name": "FBId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "StoreId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DSENodeID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DSENodeType",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SlabTypeID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SectorId",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().tablename",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TASK_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataFoundationDB",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DF_DBConnection/LEAP Tables"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "distributor_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "distributor_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "branch_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "branch_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "task_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "task_created_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_user_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "created_user_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "assigned_to",
+						"type": "nvarchar"
+					},
+					{
+						"name": "retailer_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "retailer_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "task_title",
+						"type": "nvarchar"
+					},
+					{
+						"name": "task_description",
+						"type": "nvarchar"
+					},
+					{
+						"name": "due_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "over_due",
+						"type": "nvarchar"
+					},
+					{
+						"name": "task_remark",
+						"type": "nvarchar"
+					},
+					{
+						"name": "task_status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tas_task_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tas_task_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tas_seller_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tas_seller_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Filename",
+						"type": "varchar"
+					},
+					{
+						"name": "LastModifiedDatetime",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tmpRawLEAPTAS_TASK"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_STN_MDAY_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataFoundationDB",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DF_DBConnection/LEAP Tables"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "branch_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "branch_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "doc_no",
+						"type": "nvarchar"
+					},
+					{
+						"name": "doc_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "stock_type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "subbf_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sku_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sku_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "hsn_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "upc",
+						"type": "nvarchar"
+					},
+					{
+						"name": "case_qty",
+						"type": "nvarchar"
+					},
+					{
+						"name": "piece_qty",
+						"type": "nvarchar"
+					},
+					{
+						"name": "rate",
+						"type": "nvarchar"
+					},
+					{
+						"name": "value",
+						"type": "nvarchar"
+					},
+					{
+						"name": "from_location",
+						"type": "nvarchar"
+					},
+					{
+						"name": "destination_branch",
+						"type": "nvarchar"
+					},
+					{
+						"name": "destination_location",
+						"type": "nvarchar"
+					},
+					{
+						"name": "production_batch",
+						"type": "nvarchar"
+					},
+					{
+						"name": "transaction_status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "transfer_status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "volume_utilization_perc",
+						"type": "nvarchar"
+					},
+					{
+						"name": "weight_utilization_perc",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Filename",
+						"type": "varchar"
+					},
+					{
+						"name": "LastModifiedDatetime",
+						"type": "varchar"
+					},
+					{
+						"name": "FileSetId",
+						"type": "bigint",
+						"precision": 19
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tmpRawLeapTAS_STN"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_TmpRawLeapOutstandingAmtData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "BranchCode",
+						"type": "varchar"
+					},
+					{
+						"name": "StoreCode",
+						"type": "varchar"
+					},
+					{
+						"name": "OutstandingAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "TmpRawLeapOutstandingAmtData"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_TmpRawLeapStoreMasterDetails')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "BranchCode",
+						"type": "varchar"
+					},
+					{
+						"name": "StoreCode",
+						"type": "varchar"
+					},
+					{
+						"name": "StoreName",
+						"type": "varchar"
+					},
+					{
+						"name": "ContactNo",
+						"type": "varchar"
+					},
+					{
+						"name": "ContactPerson",
+						"type": "varchar"
+					},
+					{
+						"name": "Channel",
+						"type": "varchar"
+					},
+					{
+						"name": "CustomerName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Address",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Address_2",
+						"type": "nvarchar"
+					},
+					{
+						"name": "City",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Customer_Class",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DRCPChannel",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Customer_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Town",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Town_Class",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Tin_No",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Drug_Licence No",
+						"type": "nvarchar"
+					},
+					{
+						"name": "GSTIN_No",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Pan_No",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CoverageType",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Sectorization",
+						"type": "nvarchar"
+					},
+					{
+						"name": "My_Channel",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Dse_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "STL_Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "GPS_Lat",
+						"type": "nvarchar"
+					},
+					{
+						"name": "GPS_Long",
+						"type": "nvarchar"
+					},
+					{
+						"name": "RtrRemark4",
+						"type": "nvarchar"
+					},
+					{
+						"name": "RtrRemark5",
+						"type": "nvarchar"
+					},
+					{
+						"name": "DL_No",
+						"type": "nvarchar"
+					},
+					{
+						"name": "RtrRemark7",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Distance_in_KM",
+						"type": "nvarchar"
+					},
+					{
+						"name": "RtrRemark10",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Pin_Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MKT_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "OrgStoreCode",
+						"type": "varchar"
+					},
+					{
+						"name": "ReplaceStoreCode",
+						"type": "varchar"
+					},
+					{
+						"name": "town_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "class_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "subchannel_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "mr_account_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "mr_account_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "certificate_type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "retailer_Radius",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TimeStampIns",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					},
+					{
+						"name": "flgActive",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "TmpRawLeapStoreMasterDetails"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblDownloadOrderDetail_Error')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TASOrders"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Branch_Code",
+						"type": "varchar"
+					},
+					{
+						"name": "Order_Number",
+						"type": "varchar"
+					},
+					{
+						"name": "DSE_Code",
+						"type": "varchar"
+					},
+					{
+						"name": "Retailer_Code",
+						"type": "varchar"
+					},
+					{
+						"name": "Route_Code",
+						"type": "varchar"
+					},
+					{
+						"name": "Order_Date",
+						"type": "varchar"
+					},
+					{
+						"name": "Exp_Delivery_Date",
+						"type": "varchar"
+					},
+					{
+						"name": "SUBBF_Name",
+						"type": "varchar"
+					},
+					{
+						"name": "Order_Qty",
+						"type": "varchar"
+					},
+					{
+						"name": "TeleCaller_Name",
+						"type": "varchar"
+					},
+					{
+						"name": "TeleCaller_Code",
+						"type": "varchar"
+					},
+					{
+						"name": "PO_Number",
+						"type": "varchar"
+					},
+					{
+						"name": "Error_Description",
+						"type": "varchar"
+					},
+					{
+						"name": "TrnsCycleId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "CycleId",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblDownloadOrderDetail_Error"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblINITClusterMaster')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Data Transfer"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "INITClusterID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ClusterName",
+						"type": "varchar"
+					},
+					{
+						"name": "LoginID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DateTimeStamp",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "flgActive",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblINITClusterMaster"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblINITFileList')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Data Transfer"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "INITClusterID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ClusterName",
+						"type": "varchar"
+					},
+					{
+						"name": "LoginID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DateTimeStamp",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "flgActive",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblINITFileList"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblINITSBDChannelMapping')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Data Transfer"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "INITClusterID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ClusterName",
+						"type": "varchar"
+					},
+					{
+						"name": "LoginID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DateTimeStamp",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "flgActive",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblINITSBDChannelMapping"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblINITSBDCodeMaster')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Data Transfer"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "INITClusterID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ClusterName",
+						"type": "varchar"
+					},
+					{
+						"name": "LoginID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DateTimeStamp",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "flgActive",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblINITSBDCodeMaster"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblINITSBDGroupMaster')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Data Transfer"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "INITClusterID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ClusterName",
+						"type": "varchar"
+					},
+					{
+						"name": "LoginID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DateTimeStamp",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "flgActive",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblINITSBDGroupMaster"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblINITSBDSBFList')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Data Transfer"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "INITClusterID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ClusterName",
+						"type": "varchar"
+					},
+					{
+						"name": "LoginID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DateTimeStamp",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "flgActive",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblINITSBDSBFList"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblINITSBDStoreWiseGaps')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Data Transfer"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "INITClusterID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ClusterName",
+						"type": "varchar"
+					},
+					{
+						"name": "LoginID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DateTimeStamp",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "flgActive",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblINITSBDStoreWiseGaps"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

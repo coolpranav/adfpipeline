@@ -1,0 +1,2129 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "DA-ETL-ORCHESTRATION"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/DW_Scale_100')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "DW_Scale",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "DW_Scale",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"Scaleval": "DW100c"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Resource Management"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DailyRefeshSchemePipeline_V2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "spDailyRefreshSchemeData-TAS",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spDailyRefreshSchemeData]",
+							"storedProcedureParameters": {
+								"IsFullProcessRunning": {
+									"value": "1",
+									"type": "Byte"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase_Check",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "V2 Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FinalDFProcessing-TASProcessing')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "spPopulateAllPlannedCalls-TAS",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spPopulatePlannedRetailerTargetValue-TAS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulateAllPlannedCalls]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase_Check",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spUpdateInvDetailInCallerListForDay-TAS",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spPopulateAllPlannedCalls-TAS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spUpdateInvDetailInCallerListForDay]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase_Check",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spPopulatePlannedRetailerTargetValue-TAS",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spUpdateDailyRetailerTarget-TAS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulatePlannedRetailerTargetValue]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase_Check",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spUpdateDailyRetailerTarget-TAS",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spPopulateDailyTeleCallerMeasure-TAS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spUpdateDailyRetailerTarget]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase_Check",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spPopulateDailyTeleCallerMeasure-TAS",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spCalculatePlannedCallMeasure-TAS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulateDailyTeleCallerMeasure]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase_Check",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spCalculatePlannedCallMeasure-TAS",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spDataLoadRawLeapTAS_DRCP-TAS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spCalculatePlannedCallMeasure]",
+							"storedProcedureParameters": {
+								"ProcessDt": {
+									"value": {
+										"value": "@formatDateTime(pipeline().parameters.ProcessDt,'dd-MMM-yyyy')",
+										"type": "Expression"
+									},
+									"type": "DateTime"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase_Check",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spDataLoadRawLeapTAS_DRCP-TAS",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spMasterUpdateFromDF-TAS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spDataLoadRawLeapTAS_DRCP]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase_Check",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spMasterUpdateFromDF-TAS",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spMasterUpdateFromDF]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase_Check",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spPopulateFutureF1Calls",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spDataLoadRawLeapTAS_DRCP-TAS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulateFutureF1Calls]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase_Check",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"ProcessDt": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "V2 Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FinalDFProcessing_29Apr2023_copy1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "spCalculateLuckDrawStore-TAS",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spTAS_UpdateTeleCallingActGPPoints-DF",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spCalculateLuckDrawStore]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase_Check",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "SQL_Scale S6 400 DTU",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "spCalculateLuckDrawStore-TAS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SQL_Scale",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"Scaleval": "S6",
+								"tier": "Standard",
+								"flgcalled": 1
+							}
+						}
+					},
+					{
+						"name": "spTAS_UpdateTeleCallingActGPPoints-DF",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spTAS_UpdateTeleCallingActGPPoints]"
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "V2 Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LeapData_Factforcubeprocessing_V2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SprefreshMaximusphase",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spRefreshMaximusPhase]"
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spPopulateFactCOSData_PCode",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spAS_PopulateDimTables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulateFactCOSData_PCode]",
+							"storedProcedureParameters": {
+								"RptMonthYear": {
+									"value": {
+										"value": "@pipeline().parameters.RptMonthYear",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spPopulateFactSalesData_PCode",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spAS_PopulateDimTables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulateFactSalesData_PCode]",
+							"storedProcedureParameters": {
+								"Rptmonthyear": {
+									"value": {
+										"value": "@pipeline().parameters.RptMonthYear",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spPopulateFactTargetData_PCode",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spAS_PopulateDimTables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulateFactTargetData_PCode]",
+							"storedProcedureParameters": {
+								"RptMonthYear": {
+									"value": {
+										"value": "@pipeline().parameters.RptMonthYear",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spPopulateFactInventoryData_PCode",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spAS_PopulateDimTables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulateFactInventoryData_PCode]",
+							"storedProcedureParameters": {
+								"Rptmonthyear": {
+									"value": {
+										"value": "@pipeline().parameters.RptMonthYear",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spPopulateFactARData_PCode",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spAS_PopulateDimTables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulateFactARData_PCode]",
+							"storedProcedureParameters": {
+								"RptMonthyear": {
+									"value": {
+										"value": "@pipeline().parameters.RptMonthYear",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spPopulateFactOrderData_PCode",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spAS_PopulateDimTables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulateFactOrderData_PCode]",
+							"storedProcedureParameters": {
+								"Rptmonthyear": {
+									"value": {
+										"value": "@pipeline().parameters.RptMonthYear",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spPopulateFactCoverageData_PCode",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spPopulateFactSalesData_PCode",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulateFactCoverageData_PCode]",
+							"storedProcedureParameters": {
+								"Rptmonthyear": {
+									"value": {
+										"value": "@pipeline().parameters.RptMonthYear",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spUpdateActualInvDetail",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spPopulateFactCoverageData_PCode",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spUpdateActualInvDetail]"
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spUpdateFactCoverageForTASCalls_PCode",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spUpdateActualInvDetail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spUpdateFactCoverageForTASCalls_PCode]",
+							"storedProcedureParameters": {
+								"Rptmonthyear": {
+									"value": {
+										"value": "@pipeline().parameters.RptMonthYear",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spPopulateFactStoreDistribution_PCode",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spUpdateFactCoverageForTASCalls_PCode",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulateFactStoreDistribution_PCode]",
+							"storedProcedureParameters": {
+								"Rptmonthyear": {
+									"value": {
+										"value": "@pipeline().parameters.RptMonthYear",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spAS_PopulateDimTables",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "SprefreshMaximusphase",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spAS_PopulateDimTables]"
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spDataLoadSmartBasketFile",
+						"type": "SqlServerStoredProcedure",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
+						"dependsOn": [
+							{
+								"activity": "SprefreshMaximusphase",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spDataLoadSmartBasketFile]",
+							"storedProcedureParameters": {
+								"Rptmonthyear": {
+									"value": {
+										"value": "@pipeline().parameters.RptMonthYear",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "Dev_DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spOLAPProcesStatusUpd",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spDataLoadSmartBasketFile",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "spPopulateFactCOSData_PCode",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "spPopulateFactTargetData_PCode",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "spPopulateFactInventoryData_PCode",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "spPopulateFactARData_PCode",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "spPopulateFactOrderData_PCode",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "spPopulateFactSalesData_PCode",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spOLAPProcesStatusUpd]",
+							"storedProcedureParameters": {
+								"JobId": {
+									"value": "1",
+									"type": "Int32"
+								},
+								"OLAP": {
+									"value": "0",
+									"type": "Int32"
+								},
+								"OLTP": {
+									"value": "1",
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spOLAPProcesStatusUpd_Coverage_Distribution",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spPopulateFactStoreDistribution_PCode",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spOLAPProcesStatusUpd]",
+							"storedProcedureParameters": {
+								"JobId": {
+									"value": "6",
+									"type": "Int32"
+								},
+								"OLAP": {
+									"value": "0",
+									"type": "Int32"
+								},
+								"OLTP": {
+									"value": "1",
+									"type": "Int32"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"RptMonthYear": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "V2 Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/OnlyProcessingSpExecute')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "spLoadLeapTasIntegration",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spLoadLeapTasIntegration]"
+						},
+						"linkedServiceName": {
+							"referenceName": "DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Leap Data Pipeline"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PnGAS_CubeProcess_Pcode_Sync_Fact')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "AS_CubeProcess_Pcode_ActivityAPI",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 1,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "POST",
+							"headers": {},
+							"httpRequestTimeout": "00:05:00",
+							"url": {
+								"value": "https://aspaaseastus2.asazure.windows.net/servers/indiartdxngaasprod/models/PG_DA_Olap_PCodeLvl/refreshes",
+								"type": "Expression"
+							},
+							"body": {
+								"value": "{\"Type\":\"Full\",\"CommitMode\":\"transactional\",\"MaxParallelism\": 8,\"RetryCount\":2,\"Objects\":[{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"DSR Hierarchy\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"DSR Hierarchy Planned\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"Location Hierarchy\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"Channel Hierarchy\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"Store Master\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"Product Hierarchy\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"Date\"},\n{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"SRN Reason\"},\n{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactSalesDetail\",\"partition\":\"PartitionCurrentQuarter_FactSalesDetails\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactCoverage\",\"partition\":\"PartitionCurrentQuarter_FactCoverage\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactCoverageStoreLvl\",\"partition\":\"PartitionCurrentQuarter_FactCoverageStoreLvl\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactARData\",\"partition\":\"PartitionCurrentQuarter_FactARData\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactCFR\",\"partition\":\"PartitionCurrentQuarter_FactCFRData\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactCOS\",\"partition\":\"PartitionCurrentQuarter_FactCOSData\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactFocusBrandData\",\"partition\":\"PartitionCurrentQuarter_FactFocusBrandData\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactInventory\",\"partition\":\"PartitionCurrentQuarter_FactInventory\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactSBDData\",\"partition\":\"PartitionCurrentQuarter_FactSBDData\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactStoreLvlSBDData\",\"partition\":\"PartitionCurrentQuarter_FactStoreLvlSBDData\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactTargetData\",\"partition\":\"PartitionCurrentQuarter_FactTargetData\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactOrderData\",\"partition\":\"PartitionCurrentQuarter_FactOrderData\"},\n{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactStoreDistributionDetails\",\"partition\":\"PartitionCurrentQuarter_FactStoreDistribution\"},{\"database\":\"PG_DA_Olap_PCodeLvl\",\"table\":\"tblFactWorkingDays\",\"partition\":\"Partition\"}]}\n",
+								"type": "Expression"
+							},
+							"authentication": {
+								"type": "ServicePrincipal",
+								"userTenant": "3596192b-fdf5-4e2c-a6fa-acb706c963d8",
+								"username": "f7765ce7-c577-412f-bc1c-1eb2cea07f85",
+								"resource": "https://*.asazure.windows.net",
+								"password": {
+									"type": "AzureKeyVaultSecret",
+									"store": {
+										"referenceName": "PnGAzureKeyVault",
+										"type": "LinkedServiceReference"
+									},
+									"secretName": "PnGASCubeProcessPrinciple"
+								}
+							}
+						}
+					},
+					{
+						"name": "GetRefreshId",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "AS_CubeProcess_Pcode_ActivityAPI",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 1,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "GET",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"httpRequestTimeout": "00:05:00",
+							"url": {
+								"value": "https://aspaaseastus2.asazure.windows.net/servers/dbrdashboard/models/PG_DA_Olap_PCodeLvl/refreshes",
+								"type": "Expression"
+							},
+							"body": {
+								"value": "{\"Type\":\"Full\",\"CommitMode\":\"transactional\",\"MaxParallelism\":2,\"RetryCount\":2,\"Objects\":[{\"database\":\"PG_DMS\",\"table\":\"tblFactCFR\",\"partition\":\"PartitionCurrentQuarter_FactCFRData\"},{\"database\":\"PG_DMS\",\"table\":\"tblFactCOS\",\"partition\":\"PartitionCurrentQuarter_FactCOSData\"}]}",
+								"type": "Expression"
+							},
+							"authentication": {
+								"type": "ServicePrincipal",
+								"userTenant": "3596192b-fdf5-4e2c-a6fa-acb706c963d8",
+								"username": "f7765ce7-c577-412f-bc1c-1eb2cea07f85",
+								"resource": "https://*.asazure.windows.net",
+								"password": {
+									"type": "AzureKeyVaultSecret",
+									"store": {
+										"referenceName": "PnGAzureKeyVault",
+										"type": "LinkedServiceReference"
+									},
+									"secretName": "PnGASCubeProcessPrinciple"
+								}
+							}
+						}
+					},
+					{
+						"name": "Set Array VarOuter",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "GetRefreshId",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "ArrayVar",
+							"value": {
+								"value": "@json(activity('GetRefreshId').output.Response)\n",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set Status variableOuter",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set Array VarOuter",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "status",
+							"value": {
+								"value": "@variables('ArrayVar')[0].status",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set RefreshId variable",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Set Status variableOuter",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "RefreshId",
+							"value": {
+								"value": "@variables('ArrayVar')[0].refreshId",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Until1",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "Set RefreshId variable",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@not(or(equals(variables('status'),'inProgress'),equals(variables('status'),'notStarted')))",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "CubeProcessingCheck",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"method": "GET",
+										"headers": {
+											"Content-Type": "application/json"
+										},
+										"httpRequestTimeout": "00:05:00",
+										"url": {
+											"value": "@concat('https://aspaaseastus2.asazure.windows.net/servers/dbrdashboard/models/PG_DA_Olap_PCodeLvl/refreshes/',variables('RefreshId'))",
+											"type": "Expression"
+										},
+										"body": {
+											"value": "{\"Type\":\"Full\",\"CommitMode\":\"transactional\",\"MaxParallelism\":2,\"RetryCount\":2,\"Objects\":[{\"database\":\"PG_DMS\",\"table\":\"tblFactCFR\",\"partition\":\"PartitionCurrentQuarter_FactCFRData\"},{\"database\":\"PG_DMS\",\"table\":\"tblFactCOS\",\"partition\":\"PartitionCurrentQuarter_FactCOSData\"}]}",
+											"type": "Expression"
+										},
+										"authentication": {
+											"type": "ServicePrincipal",
+											"userTenant": "3596192b-fdf5-4e2c-a6fa-acb706c963d8",
+											"username": "f7765ce7-c577-412f-bc1c-1eb2cea07f85",
+											"resource": "https://*.asazure.windows.net",
+											"password": {
+												"type": "AzureKeyVaultSecret",
+												"store": {
+													"referenceName": "PnGAzureKeyVault",
+													"type": "LinkedServiceReference"
+												},
+												"secretName": "PnGASCubeProcessPrinciple"
+											}
+										}
+									}
+								},
+								{
+									"name": "Set Array VarOuter_copy1",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "CubeProcessingCheck",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "status",
+										"value": {
+											"value": "@activity('CubeProcessingCheck').output.status",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "If Condition1",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "Set Array VarOuter_copy1",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@equals(variables('status'),'inProgress')",
+											"type": "Expression"
+										},
+										"ifTrueActivities": [
+											{
+												"name": "Wait5min",
+												"type": "Wait",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"waitTimeInSeconds": 300
+												}
+											}
+										]
+									}
+								}
+							],
+							"timeout": "7.00:00:00"
+						}
+					},
+					{
+						"name": "If Condition1_copy1",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "Until1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@not(equals(variables('status'),'succeeded'))",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "Send Notification_copy1",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"policy": {
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "Send Notification",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"EmailTo": "avinash@astix.in,alok@astix.in,phegade.md@pg.com",
+											"Subject": "Cube Fact Processing Successful",
+											"ErrorMessage": "DataFoundation Cube Fact Processing Success"
+										}
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "Send Notification",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"policy": {
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "Send Notification",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"EmailTo": "avinash@astix.in,alok@astix.in,gaurav@astix.in,phegade.md@pg.com",
+											"Subject": "Cube Fact Processing Not Successful",
+											"ErrorMessage": "DataFoundation Cube Fact Processing Fails"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "AS_ResumeandScale_S8",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "If Condition1_copy1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "AS_ResumeandScale_S8",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"flgcalled": {
+						"type": "int",
+						"defaultValue": 1
+					}
+				},
+				"variables": {
+					"ArrayVar": {
+						"type": "Array",
+						"defaultValue": [
+							"test"
+						]
+					},
+					"status": {
+						"type": "String",
+						"defaultValue": "inProgress"
+					},
+					"RefreshId": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Resource Management"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PnGLogicapp_CubeProcess')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "AS_CubeProcess_Pcode_ActivityAPI",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 1,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"method": "POST",
+							"headers": {},
+							"httpRequestTimeout": "00:05:00",
+							"url": {
+								"value": "https://indiarbala-logic-01.azurewebsites.net.rproxy.goskope.com:443/api/india-rtdx/triggers/When_a_HTTP_request_is_received/invoke?api-version=2022-05-01&sp=%2Ftriggers%2FWhen_a_HTTP_request_is_received%2Frun&sv=1.0&sig=DWzWyQKQ7B2PMPI--PYwzgGVhvuOSG3Tft5QlRAjp4s",
+								"type": "Expression"
+							},
+							"connectVia": {
+								"referenceName": "AstixServerHosting",
+								"type": "IntegrationRuntimeReference"
+							},
+							"body": {
+								"TypeID": "14"
+							},
+							"authentication": {
+								"type": "ServicePrincipal",
+								"userTenant": "3596192b-fdf5-4e2c-a6fa-acb706c963d8",
+								"username": "f7765ce7-c577-412f-bc1c-1eb2cea07f85",
+								"resource": "https://*.asazure.windows.net",
+								"password": {
+									"type": "AzureKeyVaultSecret",
+									"store": {
+										"referenceName": "PnGAzureKeyVault",
+										"type": "LinkedServiceReference"
+									},
+									"secretName": "PnGASCubeProcessPrinciple"
+								}
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Resource Management"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RetailerFlagUpdate')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "spUpdateRetailerflags",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "DF-spPopulateTASSellerType",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spUpdateRetailerflags]"
+						},
+						"linkedServiceName": {
+							"referenceName": "DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "spUpdateTASSellerType",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "spUpdateRetailerflags",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spUpdateTASSellerType]"
+						},
+						"linkedServiceName": {
+							"referenceName": "DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "DF-spPopulateTASSellerType",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPopulateTASSellerType]"
+						},
+						"linkedServiceName": {
+							"referenceName": "DataFoundationDB",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Additional Process"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ScaleDown_HawkeyeDB')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Scale_S0",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Scale_S0]"
+						},
+						"linkedServiceName": {
+							"referenceName": "HawkEye_LinkedService",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Hawk Eye"
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-02-14T16:14:46Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ScaleUp_HawkeyeDB')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Scale_S2",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Scale_S2]"
+						},
+						"linkedServiceName": {
+							"referenceName": "HawkEye_LinkedService",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Hawk Eye"
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-02-14T16:14:46Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Scale_HawkeyeDB')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Scale_S3",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Scale_S3]"
+						},
+						"linkedServiceName": {
+							"referenceName": "HawkEye_LinkedService",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Hawk Eye"
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-02-14T16:14:46Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Scaledb')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Scale_V8",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Scale_GP_Gen5_8]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-02-14T16:14:46Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TAS_DB_Scale')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SQL_Scale S3 100 DTU",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SQL_Scale",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"Scaleval": "S3",
+								"tier": "Standard"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "V2 Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TAS_DB_Scale_10 DTU')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SQL_Scale S3 10 DTU",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SQL_Scale",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"Scaleval": "S0",
+								"tier": "Standard"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "V2 Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TAS_DB_Scale_100DTU')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SQL_Scale S4 100 DTU",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SQL_Scale",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"Scaleval": "S3",
+								"tier": "Standard"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "V2 Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TAS_DB_Scale_200DTU')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SQL_Scale S4 200 DTU",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SQL_Scale",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"Scaleval": "S4",
+								"tier": "Standard"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "V2 Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Stored procedure1",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[spPoputaleCategorInvDateSales]"
+						},
+						"linkedServiceName": {
+							"referenceName": "PnGDataFoundation",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Other Pipelines"
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-02-17T07:38:58Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline3')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Stored procedure1",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Sptest]"
+						},
+						"linkedServiceName": {
+							"referenceName": "TASDatabase",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Send Error Log",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Stored procedure1",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Send Notification",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"EmailTo": "avinash@astixsolutions.com,avinash.gupta2@gmail.com",
+								"Subject": "DataFactory Failure",
+								"ErrorMessage": "Error in processing"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "Other Pipelines"
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-02-17T07:38:58Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ACRV_table')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "DF_DBConnection/LEAP Tables"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "branch_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "branch_location",
+						"type": "nvarchar"
+					},
+					{
+						"name": "dse_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "dse_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "retailer_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "retailer_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sales_invoice_no",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sales_invoice_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "aging_days",
+						"type": "nvarchar"
+					},
+					{
+						"name": "net_amount",
+						"type": "nvarchar"
+					},
+					{
+						"name": "paid_amount",
+						"type": "nvarchar"
+					},
+					{
+						"name": "balance_amount",
+						"type": "nvarchar"
+					},
+					{
+						"name": "credit_amount",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FileSetId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "Filename",
+						"type": "varchar"
+					},
+					{
+						"name": "LastModifiedDatetime",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					},
+					{
+						"name": "TimeStampIns",
+						"type": "smalldatetime",
+						"precision": 16,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tmpRawLEAPTAS_ACRV"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

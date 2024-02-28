@@ -1,0 +1,1274 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "DA-ETL-ORCHESTRATION"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblINITSBDStoreWiseGaps_New')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TeleCallingId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GPPoints",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "ParameterId",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblINITSBDStoreWiseGaps_New"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblINITSBDStoreWiseGaps_test')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TeleCallingId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GPPoints",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "ParameterId",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblINITSBDStoreWiseGaps"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblLeapARData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TeleCallingId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GPPoints",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "ParameterId",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblLeapARData"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblOrderDetail')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TeleCallingId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GPPoints",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "ParameterId",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblOrderDetail_Transfer"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblOrderMaster')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TeleCallingId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GPPoints",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "ParameterId",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblOrderMaster_Transfer"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblP3MSalesDetail_Test')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TeleCallingId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GPPoints",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "ParameterId",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblP3MSalesDetail"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblP3MStoreWiseInvNetValue')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TeleCallingId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GPPoints",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "ParameterId",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblP3MStoreWiseInvNetValue"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblSBStoreWiseBaseDetailsActual_test')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TeleCallingId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GPPoints",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "ParameterId",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblSBStoreWiseBaseDetailsActual"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblStoreMaster')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "Data Transfer"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "INITClusterID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ClusterName",
+						"type": "varchar"
+					},
+					{
+						"name": "LoginID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DateTimeStamp",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "flgActive",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblStoreMaster"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblTAS_tmpRAWTeleCallerListForDay')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "BranchCode",
+						"type": "varchar"
+					},
+					{
+						"name": "StoreCode",
+						"type": "varchar"
+					},
+					{
+						"name": "Frequency",
+						"type": "varchar"
+					},
+					{
+						"name": "StoreId",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblTAS_tmpRAWTeleCallerListForDay"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblTAS_tmpRAWTeleCallerListForDay_V2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TeleCallingId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GPPoints",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "ParameterId",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblTeleCallerListForDay_Transfer"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblTeleCallerListForDay_FutureDate')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TeleCallingId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GPPoints",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "ParameterId",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblTeleCallerListForDay_FutureDate"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblTeleCallingInvDetail')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TeleCallingId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GPPoints",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "ParameterId",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblTeleCallingInvDetail"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tblTeleCallingInvDetail_NEW')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase_Check",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TeleCallingId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GPPoints",
+						"type": "tinyint",
+						"precision": 3
+					},
+					{
+						"name": "ParameterId",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tblTeleCallingInvDetail"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tbltmpGTMModel')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "BranchCode",
+						"type": "varchar"
+					},
+					{
+						"name": "StoreCode",
+						"type": "varchar"
+					},
+					{
+						"name": "Frequency",
+						"type": "varchar"
+					},
+					{
+						"name": "StoreId",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tbltmpGTMModel"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tbltmpTASSellerType')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "BranchCode",
+						"type": "varchar"
+					},
+					{
+						"name": "StoreCode",
+						"type": "varchar"
+					},
+					{
+						"name": "Frequency",
+						"type": "varchar"
+					},
+					{
+						"name": "StoreId",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tbltmpTASSellerType"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tmpLeapDataLoadCOHGAP')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "OtherDataSet"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "coh_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "retailer_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "retailer_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_type_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sector_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "seller_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "seller_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "coh_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "target",
+						"type": "nvarchar"
+					},
+					{
+						"name": "achievement",
+						"type": "nvarchar"
+					},
+					{
+						"name": "achievement_status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "calculation_rule",
+						"type": "nvarchar"
+					},
+					{
+						"name": "coh_detail",
+						"type": "nvarchar"
+					},
+					{
+						"name": "withsale",
+						"type": "nvarchar"
+					},
+					{
+						"name": "nosale",
+						"type": "nvarchar"
+					},
+					{
+						"name": "distributor_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "distributor_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FileSetId",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tmpLeapDataLoadCOHGAP"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tmpLeapDataLoadDPSR')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "OtherDataSet"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "document_no",
+						"type": "nvarchar"
+					},
+					{
+						"name": "apply_to_doc",
+						"type": "nvarchar"
+					},
+					{
+						"name": "document_date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "transaction_type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "subbrandform_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "prod_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "customer_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "customer_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "channel_description",
+						"type": "nvarchar"
+					},
+					{
+						"name": "dse",
+						"type": "nvarchar"
+					},
+					{
+						"name": "pcode",
+						"type": "nvarchar"
+					},
+					{
+						"name": "customer_type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "hsn_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "category",
+						"type": "nvarchar"
+					},
+					{
+						"name": "brand",
+						"type": "nvarchar"
+					},
+					{
+						"name": "brandform",
+						"type": "nvarchar"
+					},
+					{
+						"name": "quantity",
+						"type": "nvarchar"
+					},
+					{
+						"name": "gross_value",
+						"type": "nvarchar"
+					},
+					{
+						"name": "discount",
+						"type": "nvarchar"
+					},
+					{
+						"name": "taxable_scheme",
+						"type": "nvarchar"
+					},
+					{
+						"name": "cgsttax",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sgsttax",
+						"type": "nvarchar"
+					},
+					{
+						"name": "igsttax",
+						"type": "nvarchar"
+					},
+					{
+						"name": "cesstax",
+						"type": "nvarchar"
+					},
+					{
+						"name": "mracc_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "mracc_desc",
+						"type": "nvarchar"
+					},
+					{
+						"name": "vendor",
+						"type": "nvarchar"
+					},
+					{
+						"name": "net_amount",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tax_on_discount",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tax_on_scheme",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tax_in_rlp",
+						"type": "nvarchar"
+					},
+					{
+						"name": "retailing",
+						"type": "nvarchar"
+					},
+					{
+						"name": "gross_in_slp",
+						"type": "nvarchar"
+					},
+					{
+						"name": "po_no",
+						"type": "nvarchar"
+					},
+					{
+						"name": "dse_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "msu",
+						"type": "nvarchar"
+					},
+					{
+						"name": "reason",
+						"type": "nvarchar"
+					},
+					{
+						"name": "dist_gstinno",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ret_gstinno",
+						"type": "nvarchar"
+					},
+					{
+						"name": "srn_ref_no",
+						"type": "nvarchar"
+					},
+					{
+						"name": "composite",
+						"type": "nvarchar"
+					},
+					{
+						"name": "cgsttax_rate",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sgsttax_rate",
+						"type": "nvarchar"
+					},
+					{
+						"name": "igsttax_rate",
+						"type": "nvarchar"
+					},
+					{
+						"name": "cesstax_rate",
+						"type": "nvarchar"
+					},
+					{
+						"name": "branch_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "branch_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "order_mode",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tc_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tc_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FileSetId",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tmpRawLEAPTAS_DPSR"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tmpRawDataP3MBranchSalesDetail')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "TC_Name",
+						"type": "varchar"
+					},
+					{
+						"name": "BranchCode",
+						"type": "varchar"
+					},
+					{
+						"name": "DSECode",
+						"type": "varchar"
+					},
+					{
+						"name": "CustCode",
+						"type": "varchar"
+					},
+					{
+						"name": "SBF",
+						"type": "varchar"
+					},
+					{
+						"name": "InvNo",
+						"type": "varchar"
+					},
+					{
+						"name": "InvDate",
+						"type": "date"
+					},
+					{
+						"name": "Qty",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NetValue",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "GrossAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "TaxAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "RETAILING",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "UPC",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "RetQty",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "RetNetValue",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "RetGrossAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "RetTaxAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "RetRETAILING",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "InvQty",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "InvNetValue",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "InvGrossAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "InvTaxAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "InvRETAILING",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "InvId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SBFNodeId",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tmpRawDataP3MBranchSalesDetail"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_TAS_tmpRawDataP3MSUBDSalesDetail')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TASDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "TAS_DBConnection"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SUBDCode",
+						"type": "varchar"
+					},
+					{
+						"name": "DSECode",
+						"type": "varchar"
+					},
+					{
+						"name": "CustCode",
+						"type": "varchar"
+					},
+					{
+						"name": "SBF",
+						"type": "varchar"
+					},
+					{
+						"name": "InvNo",
+						"type": "varchar"
+					},
+					{
+						"name": "InvDate",
+						"type": "date"
+					},
+					{
+						"name": "Qty",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "NetValue",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "GrossAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "TaxAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "RETAILING",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "UPC",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "RetQty",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "RetNetValue",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "RetGrossAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "RetTaxAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "RetRETAILING",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "InvQty",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "InvNetValue",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "InvGrossAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "InvTaxAmt",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "InvRETAILING",
+						"type": "decimal",
+						"precision": 18,
+						"scale": 2
+					},
+					{
+						"name": "InvId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SBFNodeId",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "tmpRawDataP3MSUBDSalesDetail"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
