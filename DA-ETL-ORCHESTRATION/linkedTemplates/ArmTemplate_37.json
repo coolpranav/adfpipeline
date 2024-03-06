@@ -669,6 +669,7 @@
 					},
 					{
 						"name": "If All Final Table Loaded",
+						"description": "",
 						"type": "IfCondition",
 						"dependsOn": [
 							{
