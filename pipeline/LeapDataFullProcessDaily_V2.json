@@ -46,6 +46,8 @@
 			{
 				"name": "If All Final Table Loaded",
 				"type": "IfCondition",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "SpCheckAllFileProcessStatus",
