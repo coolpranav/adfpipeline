@@ -143,5 +143,6 @@
 			"schema": "dbo",
 			"table": "tmpRawLEAPTAS_COHGAP"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

@@ -98,5 +98,6 @@
 			"schema": "dbo",
 			"table": "tmpRawLEAPTAS_SalesStatus"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

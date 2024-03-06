@@ -74,6 +74,8 @@
 		"folder": {
 			"name": "Other Pipelines"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2024-03-06T07:08:02Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

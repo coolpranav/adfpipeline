@@ -129,6 +129,8 @@
 		"folder": {
 			"name": "Additional Process"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2024-03-06T07:08:53Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

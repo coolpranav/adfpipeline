@@ -117,5 +117,6 @@
 			"schema": "dbo",
 			"table": "tmpRawLeapTAS_STN"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

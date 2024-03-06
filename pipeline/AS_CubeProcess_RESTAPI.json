@@ -15,8 +15,8 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": "https://aspaaseastus2.asazure.windows.net/servers/dbrdashboard/models/PG_DMS/sync",
 					"method": "POST",
+					"url": "https://aspaaseastus2.asazure.windows.net/servers/dbrdashboard/models/PG_DMS/sync",
 					"body": {
 						"value": "{\"Type\":\"Full\",\"CommitMode\":\"transactional\",\"MaxParallelism\":2,\"RetryCount\":2,\"Objects\":[{\"database\":\"PG_DMS\",\"table\":\"tblFactCFR\",\"partition\":\"PartitionCurrentQuarter_FactCFRData\"},{\"database\":\"PG_DMS\",\"table\":\"tblFactCOS\",\"partition\":\"PartitionCurrentQuarter_FactCOSData\"}]}",
 						"type": "Expression"
@@ -31,6 +31,8 @@
 		"folder": {
 			"name": "Resource Management"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2024-03-06T07:08:03Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

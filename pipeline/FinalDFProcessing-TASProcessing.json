@@ -256,6 +256,8 @@
 		"folder": {
 			"name": "V2 Pipelines"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2024-03-06T07:08:04Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

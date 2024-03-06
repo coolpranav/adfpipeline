@@ -962,6 +962,10 @@
 						]
 					}
 				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "TimeToday",
@@ -975,6 +979,10 @@
 				"name": "DeleteDate",
 				"type": "SetVariable",
 				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "DataDeleteDate",
@@ -996,6 +1004,8 @@
 		"folder": {
 			"name": "API"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2024-03-06T07:08:30Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

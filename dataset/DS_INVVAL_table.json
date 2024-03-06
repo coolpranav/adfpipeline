@@ -173,5 +173,6 @@
 			"schema": "dbo",
 			"table": "tmpRawLEAPTAS_INVVAL"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

@@ -15,11 +15,11 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": "https://prod-06.eastus2.logic.azure.com:443/workflows/5a488296c4474ca593f4be3afc0679ef/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ZMhGXlUFHacBwc8UHzK-pruXajyDxJnWeYziG6qSF_s",
 					"method": "POST",
 					"headers": {
 						"Content-Type": "application/json"
 					},
+					"url": "https://prod-06.eastus2.logic.azure.com:443/workflows/5a488296c4474ca593f4be3afc0679ef/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ZMhGXlUFHacBwc8UHzK-pruXajyDxJnWeYziG6qSF_s",
 					"body": {
 						"value": "{\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Subject\": \"@{pipeline().parameters.Subject}\",\n   \"ErrorMessage\": \"@{pipeline().parameters.ErrorMessage}\",\n   \"EmailTo\": \"@{pipeline().parameters.EmailTo}\"\n}\t",
 						"type": "Expression"
@@ -42,7 +42,7 @@
 			}
 		},
 		"annotations": [],
-		"lastPublishTime": "2020-10-28T11:18:23Z"
+		"lastPublishTime": "2024-03-06T07:08:52Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

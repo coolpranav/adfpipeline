@@ -49,5 +49,6 @@
 			"schema": "dbo",
 			"table": "tbltmpRurbanSplit"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

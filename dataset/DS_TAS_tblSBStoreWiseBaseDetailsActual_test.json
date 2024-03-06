@@ -31,5 +31,6 @@
 			"schema": "dbo",
 			"table": "tblSBStoreWiseBaseDetailsActual"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

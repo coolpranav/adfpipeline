@@ -15,11 +15,11 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"method": "POST",
 					"url": {
 						"value": "https://aspaaseastus2.asazure.windows.net/servers/dbrdashboard/models/PG_DMS/refreshes",
 						"type": "Expression"
 					},
-					"method": "POST",
 					"body": {
 						"value": "{\"Type\":\"Full\",\"CommitMode\":\"transactional\",\"MaxParallelism\":2,\"RetryCount\":2,\"Objects\":[{\"database\":\"PG_DMS\",\"table\":\"DSR Hierarchy\"},{\"database\":\"PG_DMS\",\"table\":\"Location Hierarchy\"},{\"database\":\"PG_DMS\",\"table\":\"Channel Hierarchy\"},{\"database\":\"PG_DMS\",\"table\":\"Store Master\"},{\"database\":\"PG_DMS\",\"table\":\"Product Hierarchy\"},{\"database\":\"PG_DMS\",\"table\":\"Date\"},{\"database\":\"PG_DMS\",\"table\":\"SRN Reason\"}]}",
 						"type": "Expression"
@@ -50,13 +50,13 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": {
-						"value": "https://aspaaseastus2.asazure.windows.net/servers/dbrdashboard/models/PG_DMS/refreshes",
-						"type": "Expression"
-					},
 					"method": "GET",
 					"headers": {
 						"Content-Type": "application/json"
+					},
+					"url": {
+						"value": "https://aspaaseastus2.asazure.windows.net/servers/dbrdashboard/models/PG_DMS/refreshes",
+						"type": "Expression"
 					},
 					"body": {
 						"value": "{\"Type\":\"Full\",\"CommitMode\":\"transactional\",\"MaxParallelism\":2,\"RetryCount\":2,\"Objects\":[{\"database\":\"PG_DMS\",\"table\":\"tblFactCFR\",\"partition\":\"PartitionCurrentQuarter_FactCFRData\"},{\"database\":\"PG_DMS\",\"table\":\"tblFactCOS\",\"partition\":\"PartitionCurrentQuarter_FactCOSData\"}]}",
@@ -79,6 +79,10 @@
 						]
 					}
 				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "ArrayVar",
@@ -99,6 +103,10 @@
 						]
 					}
 				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "status",
@@ -119,6 +127,10 @@
 						]
 					}
 				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "RefreshId",
@@ -159,13 +171,13 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"url": {
-									"value": "@concat('https://aspaaseastus2.asazure.windows.net/servers/dbrdashboard/models/PG_DMS/refreshes/',variables('RefreshId'))",
-									"type": "Expression"
-								},
 								"method": "GET",
 								"headers": {
 									"Content-Type": "application/json"
+								},
+								"url": {
+									"value": "@concat('https://aspaaseastus2.asazure.windows.net/servers/dbrdashboard/models/PG_DMS/refreshes/',variables('RefreshId'))",
+									"type": "Expression"
 								},
 								"body": {
 									"value": "{\"Type\":\"Full\",\"CommitMode\":\"transactional\",\"MaxParallelism\":2,\"RetryCount\":2,\"Objects\":[{\"database\":\"PG_DMS\",\"table\":\"tblFactCFR\",\"partition\":\"PartitionCurrentQuarter_FactCFRData\"},{\"database\":\"PG_DMS\",\"table\":\"tblFactCOS\",\"partition\":\"PartitionCurrentQuarter_FactCOSData\"}]}",
@@ -188,6 +200,10 @@
 									]
 								}
 							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "status",
@@ -253,6 +269,9 @@
 							"name": "Send Notification_copy1",
 							"type": "ExecutePipeline",
 							"dependsOn": [],
+							"policy": {
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
@@ -273,6 +292,9 @@
 							"name": "Send Notification",
 							"type": "ExecutePipeline",
 							"dependsOn": [],
+							"policy": {
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
@@ -309,6 +331,8 @@
 		"folder": {
 			"name": "Resource Management"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2024-03-06T07:08:57Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

@@ -109,5 +109,6 @@
 			"schema": "dbo",
 			"table": "tmpRawLEAPTAS_DRCP_Cloud2"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

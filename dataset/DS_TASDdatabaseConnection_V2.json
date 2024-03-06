@@ -14,5 +14,6 @@
 		"typeProperties": {
 			"schema": "dbo"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

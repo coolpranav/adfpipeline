@@ -189,5 +189,6 @@
 			"schema": "dbo",
 			"table": "tmpRawLEAPTAS_SCHMTR"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

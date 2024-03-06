@@ -15,8 +15,8 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": "https://management.azure.com/subscriptions/15354be3-bb86-4045-a1a1-7bf7d9ba1c31/resourceGroups/DBRDashboard/providers/Microsoft.AnalysisServices/servers/dbrdashboard/Suspend?api-version=2017-08-01",
 					"method": "POST",
+					"url": "https://management.azure.com/subscriptions/15354be3-bb86-4045-a1a1-7bf7d9ba1c31/resourceGroups/DBRDashboard/providers/Microsoft.AnalysisServices/servers/dbrdashboard/Suspend?api-version=2017-08-01",
 					"body": {
 						"value": "{\"Dummy\":\"Dummy\"}",
 						"type": "Expression"
@@ -31,6 +31,8 @@
 		"folder": {
 			"name": "Resource Management"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2024-03-06T07:07:51Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

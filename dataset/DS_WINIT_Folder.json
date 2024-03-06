@@ -25,5 +25,6 @@
 				"container": "cntwinit"
 			}
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

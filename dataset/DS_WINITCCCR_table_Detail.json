@@ -153,5 +153,6 @@
 			"schema": "dbo",
 			"table": "tmpRawWinit_CCRDetail"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

@@ -325,6 +325,8 @@
 		"folder": {
 			"name": "DF-To-TAS"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2024-03-06T07:08:51Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

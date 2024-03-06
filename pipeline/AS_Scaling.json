@@ -17,6 +17,9 @@
 							"name": "AS_ResumeandScale",
 							"type": "ExecutePipeline",
 							"dependsOn": [],
+							"policy": {
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
@@ -39,6 +42,8 @@
 		"folder": {
 			"name": "Resource Management"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2024-03-06T07:07:54Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }

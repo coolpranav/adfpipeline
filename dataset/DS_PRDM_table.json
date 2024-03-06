@@ -81,5 +81,6 @@
 			"schema": "dbo",
 			"table": "tmpRawLEAPTAS_PRDM"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

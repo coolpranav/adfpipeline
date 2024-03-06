@@ -48,5 +48,6 @@
 		"typeProperties": {
 			"table": "tblCustomerXMLData"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

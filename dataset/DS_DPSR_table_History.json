@@ -392,5 +392,6 @@
 			"schema": "dbo",
 			"table": "tmpRawLEAPTAS_DPSR_AugJan21"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

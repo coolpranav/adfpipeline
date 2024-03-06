@@ -4114,6 +4114,8 @@
 		"folder": {
 			"name": "API"
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2024-03-06T07:08:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
