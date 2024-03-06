@@ -45,6 +45,7 @@
 			},
 			{
 				"name": "If All Final Table Loaded",
+				"description": "COMMENT",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
