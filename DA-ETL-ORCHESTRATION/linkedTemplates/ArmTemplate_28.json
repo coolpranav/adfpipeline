@@ -365,6 +365,8 @@
 					{
 						"name": "Send Success Notification",
 						"type": "ExecutePipeline",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [
 							{
 								"activity": "APIDataFileGeneration",

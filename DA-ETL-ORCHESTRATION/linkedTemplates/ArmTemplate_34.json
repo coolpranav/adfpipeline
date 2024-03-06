@@ -656,6 +656,8 @@
 					{
 						"name": "CopyS3-To-Staging_Cloud1",
 						"type": "ExecutePipeline",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"secureInput": false
@@ -682,6 +684,8 @@
 					{
 						"name": "CopyS3-To-Staging_Cloud1_part2",
 						"type": "ExecutePipeline",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [
 							{
 								"activity": "CopyLeap_Staging-To-DB_DistributorLevel_9",
@@ -715,6 +719,8 @@
 					{
 						"name": "CopyS3-To-Staging_Cloud1_part3",
 						"type": "ExecutePipeline",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [
 							{
 								"activity": "CopyLeap_Staging-To-DB_CCCR_V2",
@@ -1214,6 +1220,8 @@
 					{
 						"name": "CopyS3-To-Staging_Cloud2",
 						"type": "ExecutePipeline",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"secureInput": false
@@ -1240,6 +1248,8 @@
 					{
 						"name": "CopyS3-To-Staging_Cloud2_part2",
 						"type": "ExecutePipeline",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [
 							{
 								"activity": "CopyLeap_Staging-To-DB_Cloud2_DistributorLevel_9",
@@ -1273,6 +1283,8 @@
 					{
 						"name": "CopyS3-To-Staging_Cloud2_part3",
 						"type": "ExecutePipeline",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [
 							{
 								"activity": "CopyLeap_Staging-To-DB_Cloud2_3_V2",
@@ -1772,6 +1784,8 @@
 					{
 						"name": "CopyS3-To-Staging_Cloud3",
 						"type": "ExecutePipeline",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"secureInput": false
@@ -1798,6 +1812,8 @@
 					{
 						"name": "CopyS3-To-Staging_Cloud3_part2",
 						"type": "ExecutePipeline",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [
 							{
 								"activity": "CopyLeap_Staging-To-DB_Cloud3_DistributorLevel_9",
@@ -1831,6 +1847,8 @@
 					{
 						"name": "CopyS3-To-Staging_Cloud3_part3",
 						"type": "ExecutePipeline",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [
 							{
 								"activity": "CopyLeap_Staging-To-DB_Cloud3_CCCR_V2",

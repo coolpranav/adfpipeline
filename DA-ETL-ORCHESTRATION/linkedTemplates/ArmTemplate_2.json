@@ -10,7 +10,7 @@
 		"PremiumDatafoundationconnection_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'PremiumDatafoundationconnection'",
-			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=pgdatafoundation.database.windows.net;Initial Catalog=DataFoundation"
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=pngdatafoundation.database.windows.net;Initial Catalog=PnGDataFoundation"
 		},
 		"PremiumDatafoundationconnection_servicePrincipalKey": {
 			"type": "secureString",
@@ -26,7 +26,12 @@
 		},
 		"TASDatabase_Check_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'TASDatabase_Check'"
+			"metadata": "Secure string for 'connectionString' of 'TASDatabase_Check'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=pngdatafoundation.database.windows.net;Initial Catalog=db_PG_DMS_TeleCalling"
+		},
+		"TASDatabase_Check_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'TASDatabase_Check'"
 		},
 		"TASDatabase_Test_connectionString": {
 			"type": "secureString",
@@ -42,7 +47,7 @@
 		},
 		"PremiumDatafoundationconnection_properties_typeProperties_servicePrincipalId": {
 			"type": "string",
-			"defaultValue": "4be52bb2-b61f-46c8-b09a-eefdfd6082a1"
+			"defaultValue": "7ec6607e-638a-46bf-9ff0-ea38bacb5ea9"
 		},
 		"PremiumDatafoundationconnection_properties_typeProperties_tenant": {
 			"type": "string",
@@ -51,6 +56,14 @@
 		"RTDC_Legacy_properties_typeProperties_accessKeyId": {
 			"type": "string",
 			"defaultValue": "asfvsadsddsvdsgsdgdgdfbdfbdhfyjtyj"
+		},
+		"TASDatabase_Check_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "7ec6607e-638a-46bf-9ff0-ea38bacb5ea9"
+		},
+		"TASDatabase_Check_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "515445df-f272-4c96-aa97-d670cbdeab20"
 		}
 	},
 	"variables": {
@@ -116,7 +129,13 @@
 				"annotations": [],
 				"type": "AzureSqlDatabase",
 				"typeProperties": {
-					"connectionString": "[parameters('TASDatabase_Check_connectionString')]"
+					"connectionString": "[parameters('TASDatabase_Check_connectionString')]",
+					"servicePrincipalId": "[parameters('TASDatabase_Check_properties_typeProperties_servicePrincipalId')]",
+					"servicePrincipalKey": {
+						"type": "SecureString",
+						"value": "[parameters('TASDatabase_Check_servicePrincipalKey')]"
+					},
+					"tenant": "[parameters('TASDatabase_Check_properties_typeProperties_tenant')]"
 				}
 			},
 			"dependsOn": []
@@ -553,7 +572,8 @@
 				"folder": {
 					"name": "Resource Management"
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2024-03-06T07:08:56Z"
 			},
 			"dependsOn": []
 		},
@@ -896,7 +916,8 @@
 				"folder": {
 					"name": "Resource Management"
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2024-03-06T07:08:57Z"
 			},
 			"dependsOn": []
 		},
@@ -1242,7 +1263,8 @@
 				"folder": {
 					"name": "Resource Management"
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2024-03-06T07:08:57Z"
 			},
 			"dependsOn": []
 		},
@@ -1296,7 +1318,8 @@
 				"folder": {
 					"name": "Resource Management"
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2024-03-06T07:07:54Z"
 			},
 			"dependsOn": []
 		},
@@ -1333,7 +1356,8 @@
 				"folder": {
 					"name": "V2 Pipelines"
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2024-03-06T07:07:53Z"
 			},
 			"dependsOn": []
 		},
@@ -1370,7 +1394,8 @@
 				"folder": {
 					"name": "V2 Pipelines"
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2024-03-06T07:08:25Z"
 			},
 			"dependsOn": []
 		},
@@ -1481,7 +1506,8 @@
 				"folder": {
 					"name": "V2 Pipelines"
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2024-03-06T07:08:49Z"
 			},
 			"dependsOn": []
 		},
@@ -1532,7 +1558,8 @@
 				"folder": {
 					"name": "Leap Data Pipeline"
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2024-03-06T07:08:53Z"
 			},
 			"dependsOn": []
 		},
@@ -1610,7 +1637,8 @@
 				"folder": {
 					"name": "Leap Data Pipeline"
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2024-03-06T07:08:26Z"
 			},
 			"dependsOn": []
 		},

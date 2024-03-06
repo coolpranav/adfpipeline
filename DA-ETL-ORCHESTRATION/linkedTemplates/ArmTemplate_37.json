@@ -669,6 +669,7 @@
 					},
 					{
 						"name": "If All Final Table Loaded",
+						"description": "",
 						"type": "IfCondition",
 						"dependsOn": [
 							{
@@ -767,6 +768,8 @@
 								{
 									"name": "WaitforNCSToFinish",
 									"type": "ExecutePipeline",
+									"state": "Inactive",
+									"onInactiveMarkAs": "Succeeded",
 									"dependsOn": [
 										{
 											"activity": "Wait1 Second",
@@ -818,6 +821,8 @@
 								{
 									"name": "APIExtractPipeline",
 									"type": "ExecutePipeline",
+									"state": "Inactive",
+									"onInactiveMarkAs": "Succeeded",
 									"dependsOn": [
 										{
 											"activity": "DW_Scale Processing",
