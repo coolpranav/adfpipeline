@@ -4,6 +4,7 @@
 		"activities": [
 			{
 				"name": "Until Cloud 1 Processing Done",
+				"description": "COMMENT",
 				"type": "Until",
 				"dependsOn": [],
 				"userProperties": [],
@@ -24,6 +25,10 @@
 									]
 								}
 							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "flgFullProcessingPending",
@@ -82,6 +87,10 @@
 									]
 								}
 							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "CurrentCountNoofCheck",
@@ -102,6 +111,10 @@
 									]
 								}
 							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "PreviousCountNoofCheck",
@@ -152,6 +165,10 @@
 									]
 								}
 							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "checkvalue",
@@ -165,6 +182,10 @@
 							"name": "Set variable2",
 							"type": "SetVariable",
 							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
 								"variableName": "checkvalue1",
