@@ -1,0 +1,1406 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "DA-ETL-ORCHESTRATION"
+		},
+		"APIDB_LinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'APIDB_LinkedService'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=pngdatafoundation.database.windows.net;Initial Catalog=db_DFAPI"
+		},
+		"APIDB_LinkedService_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'APIDB_LinkedService'"
+		},
+		"AstixLiveServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AstixLiveServer'"
+		},
+		"DFDatafoundation_Anuj_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'DFDatafoundation_Anuj'"
+		},
+		"DFLeapTempStorageLink_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'DFLeapTempStorageLink'"
+		},
+		"DFPolybaseStagingStorageLink_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'DFPolybaseStagingStorageLink'"
+		},
+		"DataFoundationDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'DataFoundationDB'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=pngdatafoundation.database.windows.net;Initial Catalog=PnGDataFoundation"
+		},
+		"DataFoundationDB_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'DataFoundationDB'"
+		},
+		"Dev_DataFoundationDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Dev_DataFoundationDB'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=pngdatafoundation.database.windows.net;Initial Catalog=PnGDataFoundation"
+		},
+		"Dev_DataFoundationDB_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'Dev_DataFoundationDB'"
+		},
+		"HawkEye_LinkedService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'HawkEye_LinkedService'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=pngdatafoundation.database.windows.net;Initial Catalog=db_PG_HawkeyePWA"
+		},
+		"HawkEye_LinkedService_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'HawkEye_LinkedService'"
+		},
+		"HawkeyeDBOn67_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'HawkeyeDBOn67'"
+		},
+		"Leap_AmazonS3_secretAccessKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'secretAccessKey' of 'Leap_AmazonS3'"
+		},
+		"LinkedService_PnGADLS_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LinkedService_PnGADLS'"
+		},
+		"MaximusDBLink_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'MaximusDBLink'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=pngdatafoundation.database.windows.net;Initial Catalog=db_PG_Maximus"
+		},
+		"MaximusDBLink_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'MaximusDBLink'"
+		},
+		"PnGDCC_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'PnGDCC'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=pngdatafoundation.database.windows.net;Initial Catalog=db_PG_DCC"
+		},
+		"PnGDCC_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'PnGDCC'"
+		},
+		"PnGDataFoundation_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'PnGDataFoundation'"
+		},
+		"PolybaseLink_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'PolybaseLink'"
+		},
+		"PremiumDatafoundationconnection_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'PremiumDatafoundationconnection'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=pngdatafoundation.database.windows.net;Initial Catalog=PnGDataFoundation"
+		},
+		"PremiumDatafoundationconnection_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'PremiumDatafoundationconnection'"
+		},
+		"RTDC_Legacy_secretAccessKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'secretAccessKey' of 'RTDC_Legacy'"
+		},
+		"SQLServerNCSAstix_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SQLServerNCSAstix'"
+		},
+		"Swingdbconnection_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Swingdbconnection'"
+		},
+		"TASDatabase_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'TASDatabase'"
+		},
+		"TASDatabase_Check_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'TASDatabase_Check'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=pngdatafoundation.database.windows.net;Initial Catalog=db_PG_DMS_TeleCalling"
+		},
+		"TASDatabase_Check_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'TASDatabase_Check'"
+		},
+		"TASDatabase_Test_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'TASDatabase_Test'"
+		},
+		"dfdatafoundationLink_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'dfdatafoundationLink'"
+		},
+		"dfdatafoundation_Hawkeye_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'dfdatafoundation_Hawkeye'"
+		},
+		"APIDB_LinkedService_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "7ec6607e-638a-46bf-9ff0-ea38bacb5ea9"
+		},
+		"APIDB_LinkedService_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "515445df-f272-4c96-aa97-d670cbdeab20"
+		},
+		"CCRDataStorageLink_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'CCRDataStorageLink'"
+		},
+		"DataFoundationDB_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "7ec6607e-638a-46bf-9ff0-ea38bacb5ea9"
+		},
+		"DataFoundationDB_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "515445df-f272-4c96-aa97-d670cbdeab20"
+		},
+		"Dev_DataFoundationDB_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "7ec6607e-638a-46bf-9ff0-ea38bacb5ea9"
+		},
+		"Dev_DataFoundationDB_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "515445df-f272-4c96-aa97-d670cbdeab20"
+		},
+		"HawkEye_LinkedService_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "7ec6607e-638a-46bf-9ff0-ea38bacb5ea9"
+		},
+		"HawkEye_LinkedService_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "515445df-f272-4c96-aa97-d670cbdeab20"
+		},
+		"Leap_AmazonS3_properties_typeProperties_accessKeyId": {
+			"type": "string",
+			"defaultValue": "AKIAW6LTDL6KHDJLBDO2"
+		},
+		"LinkedService_PnGADLS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://pgdfdatafoundationadls.dfs.core.windows.net/"
+		},
+		"MaximusDBLink_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "7ec6607e-638a-46bf-9ff0-ea38bacb5ea9"
+		},
+		"MaximusDBLink_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "515445df-f272-4c96-aa97-d670cbdeab20"
+		},
+		"NCSdataStorageLink_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'NCSdataStorageLink'"
+		},
+		"PnGAzureKeyVault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://PnGDFAzureKeyVault.vault.azure.net/"
+		},
+		"PnGDCC_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "7ec6607e-638a-46bf-9ff0-ea38bacb5ea9"
+		},
+		"PnGDCC_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "515445df-f272-4c96-aa97-d670cbdeab20"
+		},
+		"PremiumDatafoundationconnection_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "7ec6607e-638a-46bf-9ff0-ea38bacb5ea9"
+		},
+		"PremiumDatafoundationconnection_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "515445df-f272-4c96-aa97-d670cbdeab20"
+		},
+		"RTDC_Legacy_properties_typeProperties_accessKeyId": {
+			"type": "string",
+			"defaultValue": "asfvsadsddsvdsgsdgdgdfbdfbdhfyjtyj"
+		},
+		"TASDatabase_Check_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "7ec6607e-638a-46bf-9ff0-ea38bacb5ea9"
+		},
+		"TASDatabase_Check_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "515445df-f272-4c96-aa97-d670cbdeab20"
+		},
+		"CCCRDataProcessing_properties_CCCRDataProcessing_V2_parameters_DataDate": {
+			"type": "string",
+			"defaultValue": "@formatDateTime(utcNow(),'dd-MMM-yyyy')"
+		},
+		"CCCRDataProcessing_properties_CCCRDataProcessing_V2_parameters_windowStart": {
+			"type": "string",
+			"defaultValue": "@adddays(trigger().scheduledTime, -1)"
+		},
+		"CCCRDataProcessing_properties_CCCRDataProcessing_V2_parameters_windowEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().scheduledTime"
+		},
+		"HawkeyeDataImport_properties_HawkeyeDataImport_parameters_Container": {
+			"type": "string",
+			"defaultValue": "hawkeye-pwa"
+		},
+		"HawkeyeDataImport_properties_HawkeyeDataImport_parameters_ProcessedDataDate": {
+			"type": "string",
+			"defaultValue": "@{formatDateTime(utcNow(),'dd-MMM-yyyy')}"
+		},
+		"LeapDataMormningProcessing_properties_LeapDataMorningProcessing_V2_parameters_DataProcessDate": {
+			"type": "string",
+			"defaultValue": "@{convertFromUtc(utcNow(), 'India Standard Time','dd-MMM-yyyy')}"
+		},
+		"LeapDataMormningProcessing_properties_LeapDataMorningProcessing_V2_parameters_Step": {
+			"type": "string",
+			"defaultValue": "2"
+		},
+		"LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_windowStart": {
+			"type": "string",
+			"defaultValue": "@adddays(trigger().scheduledTime, -1)"
+		},
+		"LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_windowEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().scheduledTime"
+		},
+		"LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_DataProcessDate": {
+			"type": "string",
+			"defaultValue": "@{formatDateTime(utcNow(),'dd-MMM-yyyy')}"
+		},
+		"LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_Container": {
+			"type": "string",
+			"defaultValue": "cntleap"
+		},
+		"LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_Directory": {
+			"type": "string",
+			"defaultValue": "@{concat('/', formatDateTime(trigger().scheduledTime, 'yyyy'), '/', formatDateTime(trigger().scheduledTime, 'MM'), '/', formatDateTime(trigger().scheduledTime, 'dd'), '/')}"
+		},
+		"LeapFileLoading_At6_properties_LeapDataMovement_WithoutProcessing_parameters_windowStart": {
+			"type": "string",
+			"defaultValue": "@adddays(trigger().scheduledTime, -1)"
+		},
+		"LeapFileLoading_At6_properties_LeapDataMovement_WithoutProcessing_parameters_windowEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().scheduledTime"
+		},
+		"LeapFileLoading_WithoutProcessing_properties_LeapDataMovement_WithoutLoading_parameters_windowStart": {
+			"type": "string",
+			"defaultValue": "@adddays(trigger().scheduledTime, -1)"
+		},
+		"LeapFileLoading_WithoutProcessing_properties_LeapDataMovement_WithoutLoading_parameters_windowEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().scheduledTime"
+		},
+		"LeapFileTransfer_properties_CopyS3-To-Staging-V2_parameters_windowStart": {
+			"type": "string",
+			"defaultValue": "@adddays(trigger().scheduledTime, -1)"
+		},
+		"LeapFileTransfer_properties_CopyS3-To-Staging-V2_parameters_windowEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().scheduledTime"
+		},
+		"LeapStagingFileCleanup_properties_CopyLeapStaging-To-ADLS-AllCloudFiles_parameters_Directory": {
+			"type": "string",
+			"defaultValue": "cntleap"
+		},
+		"LeapStagingFileCleanup_properties_CopyLeapStaging-To-ADLS-AllCloudFiles_parameters_Folder": {
+			"type": "string",
+			"defaultValue": "@{concat('/', formatDateTime(trigger().scheduledTime, 'yyyy'), '/', formatDateTime(trigger().scheduledTime, 'MM'), '/', formatDateTime(trigger().scheduledTime, 'dd'), '/')}"
+		},
+		"LoadLeapOnlyProcessing_properties_LeapDataFullProcessDaily_V2_Onlyleapdata_parameters_DataProcessDate": {
+			"type": "string",
+			"defaultValue": "@{convertFromUtc(utcNow(), 'India Standard Time','dd-MMM-yyyy')}"
+		},
+		"LoadLeapOnlyProcessing_properties_LeapDataFullProcessDaily_V2_Onlyleapdata_parameters_Container": {
+			"type": "string",
+			"defaultValue": "cntleap"
+		},
+		"LoadLeapOnlyProcessing_properties_LeapDataFullProcessDaily_V2_Onlyleapdata_parameters_Directory": {
+			"type": "string",
+			"defaultValue": "@{concat('/', formatDateTime(convertFromUtc(utcNow(), 'India Standard Time'), 'yyyy'), '/', formatDateTime(convertFromUtc(utcNow(), 'India Standard Time'), 'MM'), '/', formatDateTime(convertFromUtc(utcNow(), 'India Standard Time'), 'dd'), '/')}"
+		},
+		"LoadLeapOnlyProcessing_properties_LeapDataFullProcessDaily_V2_Onlyleapdata_parameters_Step": {
+			"type": "string",
+			"defaultValue": "1"
+		},
+		"NCSSUBDDataLoadingFromAstixServer_Day_properties_NCSDataTransfer-ASTIX-TO-DF_parameters_ProcessingType": {
+			"type": "int",
+			"defaultValue": 1
+		},
+		"NCSSUBDDataLoadingFromAstixServer_Night_properties_NCSDataTransfer-ASTIX-TO-DF_parameters_ProcessingType": {
+			"type": "int",
+			"defaultValue": 2
+		},
+		"NewLeapDataProcessing_properties_LeapDataFullProcessDaily_V2_parameters_DataProcessDate": {
+			"type": "string",
+			"defaultValue": "@{convertFromUtc(utcNow(), 'India Standard Time','dd-MMM-yyyy')}"
+		},
+		"NewLeapDataProcessing_properties_LeapDataFullProcessDaily_V2_parameters_Container": {
+			"type": "string",
+			"defaultValue": "cntleap"
+		},
+		"NewLeapDataProcessing_properties_LeapDataFullProcessDaily_V2_parameters_Directory": {
+			"type": "string",
+			"defaultValue": "@{concat('/', formatDateTime(convertFromUtc(utcNow(), 'India Standard Time'), 'yyyy'), '/', formatDateTime(convertFromUtc(utcNow(), 'India Standard Time'), 'MM'), '/', formatDateTime(convertFromUtc(utcNow(), 'India Standard Time'), 'dd'), '/')}"
+		},
+		"NewLeapDataProcessing_properties_LeapDataFullProcessDaily_V2_parameters_Step": {
+			"type": "string",
+			"defaultValue": "1"
+		},
+		"S3LEAPFileTransfer_properties_CopyS3-To-Staging_parameters_windowStart": {
+			"type": "string",
+			"defaultValue": "@adddays(trigger().scheduledTime, -1)"
+		},
+		"S3LEAPFileTransfer_properties_CopyS3-To-Staging_parameters_windowEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().scheduledTime"
+		},
+		"TestTrigger_properties_Testpipeline1_parameters_DataProcessDate": {
+			"type": "string",
+			"defaultValue": "@{convertFromUtc(utcNow(), 'India Standard Time','dd-MMM-yyyy')}"
+		},
+		"Trigger_DW_Scale_properties_DW_Scale_parameters_Scaleval": {
+			"type": "string",
+			"defaultValue": "DW400c"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"APIDB_LinkedService_connectionString": {
+						"value": "[parameters('APIDB_LinkedService_connectionString')]"
+					},
+					"APIDB_LinkedService_servicePrincipalKey": {
+						"value": "[parameters('APIDB_LinkedService_servicePrincipalKey')]"
+					},
+					"AstixLiveServer_connectionString": {
+						"value": "[parameters('AstixLiveServer_connectionString')]"
+					},
+					"DFDatafoundation_Anuj_connectionString": {
+						"value": "[parameters('DFDatafoundation_Anuj_connectionString')]"
+					},
+					"DFLeapTempStorageLink_connectionString": {
+						"value": "[parameters('DFLeapTempStorageLink_connectionString')]"
+					},
+					"DFPolybaseStagingStorageLink_connectionString": {
+						"value": "[parameters('DFPolybaseStagingStorageLink_connectionString')]"
+					},
+					"DataFoundationDB_connectionString": {
+						"value": "[parameters('DataFoundationDB_connectionString')]"
+					},
+					"DataFoundationDB_servicePrincipalKey": {
+						"value": "[parameters('DataFoundationDB_servicePrincipalKey')]"
+					},
+					"Dev_DataFoundationDB_connectionString": {
+						"value": "[parameters('Dev_DataFoundationDB_connectionString')]"
+					},
+					"Dev_DataFoundationDB_servicePrincipalKey": {
+						"value": "[parameters('Dev_DataFoundationDB_servicePrincipalKey')]"
+					},
+					"HawkEye_LinkedService_connectionString": {
+						"value": "[parameters('HawkEye_LinkedService_connectionString')]"
+					},
+					"HawkEye_LinkedService_servicePrincipalKey": {
+						"value": "[parameters('HawkEye_LinkedService_servicePrincipalKey')]"
+					},
+					"HawkeyeDBOn67_connectionString": {
+						"value": "[parameters('HawkeyeDBOn67_connectionString')]"
+					},
+					"Leap_AmazonS3_secretAccessKey": {
+						"value": "[parameters('Leap_AmazonS3_secretAccessKey')]"
+					},
+					"LinkedService_PnGADLS_accountKey": {
+						"value": "[parameters('LinkedService_PnGADLS_accountKey')]"
+					},
+					"MaximusDBLink_connectionString": {
+						"value": "[parameters('MaximusDBLink_connectionString')]"
+					},
+					"MaximusDBLink_servicePrincipalKey": {
+						"value": "[parameters('MaximusDBLink_servicePrincipalKey')]"
+					},
+					"PnGDCC_connectionString": {
+						"value": "[parameters('PnGDCC_connectionString')]"
+					},
+					"PnGDCC_servicePrincipalKey": {
+						"value": "[parameters('PnGDCC_servicePrincipalKey')]"
+					},
+					"PnGDataFoundation_connectionString": {
+						"value": "[parameters('PnGDataFoundation_connectionString')]"
+					},
+					"PolybaseLink_connectionString": {
+						"value": "[parameters('PolybaseLink_connectionString')]"
+					},
+					"APIDB_LinkedService_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('APIDB_LinkedService_properties_typeProperties_servicePrincipalId')]"
+					},
+					"APIDB_LinkedService_properties_typeProperties_tenant": {
+						"value": "[parameters('APIDB_LinkedService_properties_typeProperties_tenant')]"
+					},
+					"CCRDataStorageLink_sasUri": {
+						"value": "[parameters('CCRDataStorageLink_sasUri')]"
+					},
+					"DataFoundationDB_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('DataFoundationDB_properties_typeProperties_servicePrincipalId')]"
+					},
+					"DataFoundationDB_properties_typeProperties_tenant": {
+						"value": "[parameters('DataFoundationDB_properties_typeProperties_tenant')]"
+					},
+					"Dev_DataFoundationDB_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('Dev_DataFoundationDB_properties_typeProperties_servicePrincipalId')]"
+					},
+					"Dev_DataFoundationDB_properties_typeProperties_tenant": {
+						"value": "[parameters('Dev_DataFoundationDB_properties_typeProperties_tenant')]"
+					},
+					"HawkEye_LinkedService_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('HawkEye_LinkedService_properties_typeProperties_servicePrincipalId')]"
+					},
+					"HawkEye_LinkedService_properties_typeProperties_tenant": {
+						"value": "[parameters('HawkEye_LinkedService_properties_typeProperties_tenant')]"
+					},
+					"Leap_AmazonS3_properties_typeProperties_accessKeyId": {
+						"value": "[parameters('Leap_AmazonS3_properties_typeProperties_accessKeyId')]"
+					},
+					"LinkedService_PnGADLS_properties_typeProperties_url": {
+						"value": "[parameters('LinkedService_PnGADLS_properties_typeProperties_url')]"
+					},
+					"MaximusDBLink_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('MaximusDBLink_properties_typeProperties_servicePrincipalId')]"
+					},
+					"MaximusDBLink_properties_typeProperties_tenant": {
+						"value": "[parameters('MaximusDBLink_properties_typeProperties_tenant')]"
+					},
+					"NCSdataStorageLink_sasUri": {
+						"value": "[parameters('NCSdataStorageLink_sasUri')]"
+					},
+					"PnGAzureKeyVault_properties_typeProperties_baseUrl": {
+						"value": "[parameters('PnGAzureKeyVault_properties_typeProperties_baseUrl')]"
+					},
+					"PnGDCC_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('PnGDCC_properties_typeProperties_servicePrincipalId')]"
+					},
+					"PnGDCC_properties_typeProperties_tenant": {
+						"value": "[parameters('PnGDCC_properties_typeProperties_tenant')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"PremiumDatafoundationconnection_connectionString": {
+						"value": "[parameters('PremiumDatafoundationconnection_connectionString')]"
+					},
+					"PremiumDatafoundationconnection_servicePrincipalKey": {
+						"value": "[parameters('PremiumDatafoundationconnection_servicePrincipalKey')]"
+					},
+					"RTDC_Legacy_secretAccessKey": {
+						"value": "[parameters('RTDC_Legacy_secretAccessKey')]"
+					},
+					"TASDatabase_connectionString": {
+						"value": "[parameters('TASDatabase_connectionString')]"
+					},
+					"TASDatabase_Check_connectionString": {
+						"value": "[parameters('TASDatabase_Check_connectionString')]"
+					},
+					"TASDatabase_Check_servicePrincipalKey": {
+						"value": "[parameters('TASDatabase_Check_servicePrincipalKey')]"
+					},
+					"TASDatabase_Test_connectionString": {
+						"value": "[parameters('TASDatabase_Test_connectionString')]"
+					},
+					"dfdatafoundationLink_connectionString": {
+						"value": "[parameters('dfdatafoundationLink_connectionString')]"
+					},
+					"dfdatafoundation_Hawkeye_connectionString": {
+						"value": "[parameters('dfdatafoundation_Hawkeye_connectionString')]"
+					},
+					"PremiumDatafoundationconnection_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('PremiumDatafoundationconnection_properties_typeProperties_servicePrincipalId')]"
+					},
+					"PremiumDatafoundationconnection_properties_typeProperties_tenant": {
+						"value": "[parameters('PremiumDatafoundationconnection_properties_typeProperties_tenant')]"
+					},
+					"RTDC_Legacy_properties_typeProperties_accessKeyId": {
+						"value": "[parameters('RTDC_Legacy_properties_typeProperties_accessKeyId')]"
+					},
+					"TASDatabase_Check_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('TASDatabase_Check_properties_typeProperties_servicePrincipalId')]"
+					},
+					"TASDatabase_Check_properties_typeProperties_tenant": {
+						"value": "[parameters('TASDatabase_Check_properties_typeProperties_tenant')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_2')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_4",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_4.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_3')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_5",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_5.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_4')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_6",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_6.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_5')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_7",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_7.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_6')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_8",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_8.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_7')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_9",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_9.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_8')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_10",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_10.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_9')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_11",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_11.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_10')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_12",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_12.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_11')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_13",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_13.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_12')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_14",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_14.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_13')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_15",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_15.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_14')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_16",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_16.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_15')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_17",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_17.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_16')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_18",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_18.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"SQLServerNCSAstix_connectionString": {
+						"value": "[parameters('SQLServerNCSAstix_connectionString')]"
+					},
+					"Swingdbconnection_connectionString": {
+						"value": "[parameters('Swingdbconnection_connectionString')]"
+					},
+					"TestTrigger_properties_Testpipeline1_parameters_DataProcessDate": {
+						"value": "[parameters('TestTrigger_properties_Testpipeline1_parameters_DataProcessDate')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_17')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_19",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_19.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Trigger_DW_Scale_properties_DW_Scale_parameters_Scaleval": {
+						"value": "[parameters('Trigger_DW_Scale_properties_DW_Scale_parameters_Scaleval')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_18')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_20",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_20.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_19')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_21",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_21.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_20')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_22",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_22.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_21')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_23",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_23.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_22')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_24",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_24.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_23')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_25",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_25.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_24')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_26",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_26.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_25')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_27",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_27.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_26')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_28",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_28.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_27')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_29",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_29.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_28')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_30",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_30.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_29')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_31",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_31.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_30')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_32",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_32.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_31')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_33",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_33.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_32')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_34",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_34.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_33')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_35",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_35.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"HawkeyeDataImport_properties_HawkeyeDataImport_parameters_Container": {
+						"value": "[parameters('HawkeyeDataImport_properties_HawkeyeDataImport_parameters_Container')]"
+					},
+					"HawkeyeDataImport_properties_HawkeyeDataImport_parameters_ProcessedDataDate": {
+						"value": "[parameters('HawkeyeDataImport_properties_HawkeyeDataImport_parameters_ProcessedDataDate')]"
+					},
+					"LeapFileLoading_At6_properties_LeapDataMovement_WithoutProcessing_parameters_windowStart": {
+						"value": "[parameters('LeapFileLoading_At6_properties_LeapDataMovement_WithoutProcessing_parameters_windowStart')]"
+					},
+					"LeapFileLoading_At6_properties_LeapDataMovement_WithoutProcessing_parameters_windowEnd": {
+						"value": "[parameters('LeapFileLoading_At6_properties_LeapDataMovement_WithoutProcessing_parameters_windowEnd')]"
+					},
+					"LeapFileTransfer_properties_CopyS3-To-Staging-V2_parameters_windowStart": {
+						"value": "[parameters('LeapFileTransfer_properties_CopyS3-To-Staging-V2_parameters_windowStart')]"
+					},
+					"LeapFileTransfer_properties_CopyS3-To-Staging-V2_parameters_windowEnd": {
+						"value": "[parameters('LeapFileTransfer_properties_CopyS3-To-Staging-V2_parameters_windowEnd')]"
+					},
+					"LeapStagingFileCleanup_properties_CopyLeapStaging-To-ADLS-AllCloudFiles_parameters_Directory": {
+						"value": "[parameters('LeapStagingFileCleanup_properties_CopyLeapStaging-To-ADLS-AllCloudFiles_parameters_Directory')]"
+					},
+					"LeapStagingFileCleanup_properties_CopyLeapStaging-To-ADLS-AllCloudFiles_parameters_Folder": {
+						"value": "[parameters('LeapStagingFileCleanup_properties_CopyLeapStaging-To-ADLS-AllCloudFiles_parameters_Folder')]"
+					},
+					"S3LEAPFileTransfer_properties_CopyS3-To-Staging_parameters_windowStart": {
+						"value": "[parameters('S3LEAPFileTransfer_properties_CopyS3-To-Staging_parameters_windowStart')]"
+					},
+					"S3LEAPFileTransfer_properties_CopyS3-To-Staging_parameters_windowEnd": {
+						"value": "[parameters('S3LEAPFileTransfer_properties_CopyS3-To-Staging_parameters_windowEnd')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_34')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_36",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_36.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"CCCRDataProcessing_properties_CCCRDataProcessing_V2_parameters_DataDate": {
+						"value": "[parameters('CCCRDataProcessing_properties_CCCRDataProcessing_V2_parameters_DataDate')]"
+					},
+					"CCCRDataProcessing_properties_CCCRDataProcessing_V2_parameters_windowStart": {
+						"value": "[parameters('CCCRDataProcessing_properties_CCCRDataProcessing_V2_parameters_windowStart')]"
+					},
+					"CCCRDataProcessing_properties_CCCRDataProcessing_V2_parameters_windowEnd": {
+						"value": "[parameters('CCCRDataProcessing_properties_CCCRDataProcessing_V2_parameters_windowEnd')]"
+					},
+					"LeapFileLoading_WithoutProcessing_properties_LeapDataMovement_WithoutLoading_parameters_windowStart": {
+						"value": "[parameters('LeapFileLoading_WithoutProcessing_properties_LeapDataMovement_WithoutLoading_parameters_windowStart')]"
+					},
+					"LeapFileLoading_WithoutProcessing_properties_LeapDataMovement_WithoutLoading_parameters_windowEnd": {
+						"value": "[parameters('LeapFileLoading_WithoutProcessing_properties_LeapDataMovement_WithoutLoading_parameters_windowEnd')]"
+					},
+					"NCSSUBDDataLoadingFromAstixServer_Day_properties_NCSDataTransfer-ASTIX-TO-DF_parameters_ProcessingType": {
+						"value": "[parameters('NCSSUBDDataLoadingFromAstixServer_Day_properties_NCSDataTransfer-ASTIX-TO-DF_parameters_ProcessingType')]"
+					},
+					"NCSSUBDDataLoadingFromAstixServer_Night_properties_NCSDataTransfer-ASTIX-TO-DF_parameters_ProcessingType": {
+						"value": "[parameters('NCSSUBDDataLoadingFromAstixServer_Night_properties_NCSDataTransfer-ASTIX-TO-DF_parameters_ProcessingType')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_35')]"
+			]
+		},
+		{
+			"name": "DA-ETL-ORCHESTRATION_ArmTemplate_37",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_37.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_windowStart": {
+						"value": "[parameters('LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_windowStart')]"
+					},
+					"LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_windowEnd": {
+						"value": "[parameters('LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_windowEnd')]"
+					},
+					"LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_DataProcessDate": {
+						"value": "[parameters('LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_DataProcessDate')]"
+					},
+					"LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_Container": {
+						"value": "[parameters('LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_Container')]"
+					},
+					"LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_Directory": {
+						"value": "[parameters('LeapDataMovementDaily_properties_LeapDataMovementDaily_parameters_Directory')]"
+					},
+					"LeapDataMormningProcessing_properties_LeapDataMorningProcessing_V2_parameters_DataProcessDate": {
+						"value": "[parameters('LeapDataMormningProcessing_properties_LeapDataMorningProcessing_V2_parameters_DataProcessDate')]"
+					},
+					"LeapDataMormningProcessing_properties_LeapDataMorningProcessing_V2_parameters_Step": {
+						"value": "[parameters('LeapDataMormningProcessing_properties_LeapDataMorningProcessing_V2_parameters_Step')]"
+					},
+					"LoadLeapOnlyProcessing_properties_LeapDataFullProcessDaily_V2_Onlyleapdata_parameters_DataProcessDate": {
+						"value": "[parameters('LoadLeapOnlyProcessing_properties_LeapDataFullProcessDaily_V2_Onlyleapdata_parameters_DataProcessDate')]"
+					},
+					"LoadLeapOnlyProcessing_properties_LeapDataFullProcessDaily_V2_Onlyleapdata_parameters_Container": {
+						"value": "[parameters('LoadLeapOnlyProcessing_properties_LeapDataFullProcessDaily_V2_Onlyleapdata_parameters_Container')]"
+					},
+					"LoadLeapOnlyProcessing_properties_LeapDataFullProcessDaily_V2_Onlyleapdata_parameters_Directory": {
+						"value": "[parameters('LoadLeapOnlyProcessing_properties_LeapDataFullProcessDaily_V2_Onlyleapdata_parameters_Directory')]"
+					},
+					"LoadLeapOnlyProcessing_properties_LeapDataFullProcessDaily_V2_Onlyleapdata_parameters_Step": {
+						"value": "[parameters('LoadLeapOnlyProcessing_properties_LeapDataFullProcessDaily_V2_Onlyleapdata_parameters_Step')]"
+					},
+					"NewLeapDataProcessing_properties_LeapDataFullProcessDaily_V2_parameters_DataProcessDate": {
+						"value": "[parameters('NewLeapDataProcessing_properties_LeapDataFullProcessDaily_V2_parameters_DataProcessDate')]"
+					},
+					"NewLeapDataProcessing_properties_LeapDataFullProcessDaily_V2_parameters_Container": {
+						"value": "[parameters('NewLeapDataProcessing_properties_LeapDataFullProcessDaily_V2_parameters_Container')]"
+					},
+					"NewLeapDataProcessing_properties_LeapDataFullProcessDaily_V2_parameters_Directory": {
+						"value": "[parameters('NewLeapDataProcessing_properties_LeapDataFullProcessDaily_V2_parameters_Directory')]"
+					},
+					"NewLeapDataProcessing_properties_LeapDataFullProcessDaily_V2_parameters_Step": {
+						"value": "[parameters('NewLeapDataProcessing_properties_LeapDataFullProcessDaily_V2_parameters_Step')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'DA-ETL-ORCHESTRATION_ArmTemplate_36')]"
+			]
+		}
+	]
+}
