@@ -8340,7 +8340,7 @@
 				"activities": [
 					{
 						"name": "Until Cloud 1 Processing Done",
-						"description": "COMMENT",
+						"description": "",
 						"type": "Until",
 						"dependsOn": [],
 						"userProperties": [],
