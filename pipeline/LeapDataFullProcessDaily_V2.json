@@ -193,6 +193,8 @@
 						{
 							"name": "APIExtractPipeline",
 							"type": "ExecutePipeline",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "DW_Scale Processing",
